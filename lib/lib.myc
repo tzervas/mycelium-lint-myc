@@ -1,0 +1,45 @@
+// nodule: lint
+// `mycelium-lint` — **`myc-lint`**, lint + auto-fix (M-366).
+//
+// Surfaces the M-141 invariant lints (`mycelium_lsp::lint`) and the M-358/M-359 header lints as
+// **actionable** findings under one rule — **no silent rewrite; every fix is reified + opt-in** (G2) —
+// with a bright [`FixTier`] boundary:
+//
+// - **suggest** — a printed, reviewable edit; never auto-applied.
+// - **apply** — a mechanical, behaviour-preserving edit; applied only on `--fix`.
+// - **scaffold** — an incomplete skeleton the author must finish (e.g. an explicit `swap`, or an
+//   RFC-0014 recovery handler); **never** auto-applied (A2/I1/I5 — a control-flow change is the author's
+//   declared, bounded, opt-in choice, never the tool's).
+//
+// **First-implementation finding (M-366 §8.1 confirmation).** No M-141 lint has a *behaviour-preserving*
+// auto-fix that is not already `mycfmt`'s header canonicalization — so v0 maps every lint fix to
+// **suggest** or **scaffold**, and `--fix` applies **nothing** (header canonicalization is delegated to
+// `mycfmt`, M-364). This keeps the never-silent guarantee absolute: `myc-lint` v0 cannot rewrite your code.
+//
+// The §4.1 documentation quality-bar lint (M-363 §6, 8 checks) is now **ACTIVE** (Phase 9 Wave B): the
+// check-name set ([`DOC_QUALITY_CHECKS`]) is the single source of truth in `mycelium-doc`, where the
+// checks run over the M-363 doc-IR (see `mycelium_doc::doc_lint`). It has its own gate (`myc-doc`) and
+// still does **not** block the M-366 lint gate. KC-3: above the kernel.
+// @summary: best-effort transpilation via mycelium-transpile (M-873). Declared,
+// unvalidated — no Mycelium parser/typechecker confirms this output; see the
+// accompanying .gap.json for every construct this pass could not express.
+nodule lint;
+
+// How a fix may be applied — the opt-in boundary (the crux).
+//
+// `#[non_exhaustive]`: a future tier may be added without a breaking change — an external exhaustive
+// `match` must carry a `_` arm (M-644; additive — no variant removed).
+type FixTier = Suggest | Apply | Scaffold;
+
+impl Show[FixTier] for FixTier {
+  fn render(x: FixTier) => Bytes =
+    match x { Suggest => "Suggest", Apply => "Apply", Scaffold => "Scaffold" };
+};
+
+fn eq_FixTier(a: FixTier, b: FixTier) => Binary{1} =
+  match a { Suggest => match b { Suggest => 0b1, _ => 0b0 }, Apply => match b { Apply => 0b1, _ => 0b0 }, Scaffold => match b { Scaffold => 0b1, _ => 0b0 } };
+
+impl FixTier {
+  // The canonical label.
+  fn as_str(self: FixTier) => Bytes = match self { Suggest => "suggest", Apply => "apply", Scaffold => "scaffold" };
+};

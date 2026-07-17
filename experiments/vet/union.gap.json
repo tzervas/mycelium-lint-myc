@@ -1,0 +1,336 @@
+{
+  "gaps": [
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 1,
+      "col": 1,
+      "category": "ReservedWord",
+      "rust_construct": "ReservedWord",
+      "snippet": "nodule lint.bin.myc-lint;",
+      "reason": "derived nodule path `lint.bin.myc-lint` has segment(s) [bin] colliding with a Mycelium reserved word — emitting them verbatim would fail to parse (`nodule lint.bin.myc-lint;` tokenizes the colliding word as a keyword, not an identifier); each colliding segment is escaped with the `_kw` suffix (now `lint.bin_kw.myc_u2D_lint`) rather than dropped, so distinct source files whose only differing segment is a reserved word (e.g. `l1.fuse` vs `l1.nodule`) stay distinguishable instead of both collapsing onto the same nodule path (G2/VR-5)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 15,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "use std :: path :: Path ;",
+      "reason": "`use std.path::Path` — `std.path` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 16,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "use std :: process :: ExitCode ;",
+      "reason": "`use std.process::ExitCode` — `std.process` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 18,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "use mycelium_cli_common :: { read_source , walk_myc , Args } ;",
+      "reason": "`use mycelium_cli_common::read_source` — `mycelium_cli_common` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2); `use mycelium_cli_common::walk_myc` — `mycelium_cli_common` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2); `use mycelium_cli_common::Args` — `mycelium_cli_common` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 19,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "use mycelium_lint :: { doc_lint_status , lint_sources , LintReport } ;",
+      "reason": "`use mycelium_lint::doc_lint_status` — `doc_lint_status` is not among sibling `mycelium_lint`'s successfully-emitted surface in this batch (the sibling file itself gapped it rather than emitting it). Flagged, not guessed (VR-5/G2); `use mycelium_lint::lint_sources` — `lint_sources` is not among sibling `mycelium_lint`'s successfully-emitted surface in this batch (the sibling file itself gapped it rather than emitting it). Flagged, not guessed (VR-5/G2); `use mycelium_lint::LintReport` — `LintReport` is not among sibling `mycelium_lint`'s successfully-emitted surface in this batch (the sibling file itself gapped it rather than emitting it). Flagged, not guessed (VR-5/G2)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 20,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "use mycelium_lsp :: Severity ;",
+      "reason": "`use mycelium_lsp::Severity` — `mycelium_lsp` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 22,
+      "col": 1,
+      "category": "MultiStmtBody",
+      "rust_construct": "MultiStmtBody",
+      "snippet": "fn usage () -> ExitCode { eprintln ! (\"usage: myc-lint [--project <dir>] [--fix] [--explain] [<file.myc | ->...]\") ; ExitCode :: from (64) }",
+      "reason": "function body contains a macro-invocation statement (e.g. `debug_assert!`/`println!`) — no macro system in this grammar fragment",
+      "item_name": "usage"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 27,
+      "col": 1,
+      "category": "MultiStmtBody",
+      "rust_construct": "MultiStmtBody",
+      "snippet": "fn main () -> ExitCode { let mut project : Option < String > = None ; let mut fix = false ; let mut explain = false ; let mut paths : Vec < String > = Vec :: new () ; let mut args = Args :: from_env () ; while let Some (a) = args . next () { match a . as_str () { \"--project\" => match args . value () { Some (p) => project = Some (p) , None => return usage () , } , \"--fix\" => fix = true , \"--explain\" => explain = true , \"-\" => paths . push (\"-\" . to_owned ()) , s if s . starts_with (\"--\") => return usage () , s => paths . push (s . to_owned ()) , } } let sources = match collect_sources (project . as_deref () , & paths) { Ok (s) => s , Err (code) => return code , } ; if sources . is_empty () { eprintln ! (\"myc-lint: no .myc sources to lint\") ; return usage () ; } let report = lint_sources (& sources) ; print_report (& report , explain , fix) ; if report . has_errors () { ExitCode :: from (1) } else { ExitCode :: SUCCESS } }",
+      "reason": "`let` binding uses an unsupported pattern (only simple `let x = e;` is supported)",
+      "item_name": "main"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 67,
+      "col": 1,
+      "category": "Other",
+      "rust_construct": "Other",
+      "snippet": "fn print_report (report : & LintReport , explain : bool , fix : bool) { for f in & report . findings { let sev = match f . severity { Severity :: Error => \"error\" , Severity :: Warning => \"warning\" , } ; let tier = f . fix . as_ref () . map_or (\"\" , | x | x . tier . as_str ()) ; let tier_note = if tier . is_empty () { String :: new () } else { format ! (\" (fix: {tier})\") } ; println ! (\"{}: {sev} {} at {}{tier_note}: {}\" , f . file , f . code , f . at , f . message) ; if explain { if let Some (fx) = & f . fix { println ! (\"    → {}\" , fx . description) ; if let Some (scaffold) = & fx . scaffold { for line in scaffold . lines () { println ! (\"      {line}\") ; } } } } } let (apply , suggest , scaffold) = report . tier_counts () ; eprintln ! (\"myc-lint: {} finding(s) across {} file(s) — {apply} apply / {suggest} suggest / {scaffold} scaffold\" , report . findings . len () , report . files) ; if fix { eprintln ! (\"myc-lint: --fix applied 0 edit(s) — v0 has no safe auto-fix (suggest/scaffold only; \\\n             header canonicalization is `mycfmt`'s job). Nothing was rewritten (G2).\") ; } if explain { eprintln ! (\"myc-lint: {}\" , doc_lint_status ()) ; } }",
+      "reason": "function has no return type (implicit `()`) — no unit value is representable in this grammar fragment",
+      "item_name": "print_report"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 113,
+      "col": 1,
+      "category": "Other",
+      "rust_construct": "Other",
+      "snippet": "# [doc = \" Resolve the sources: `--project <dir>` walks for `.myc`; explicit paths are read (`-` = stdin);\"] # [doc = \" neither → the current directory. The `.myc` walk is `mycelium_cli_common::walk_myc` (shared with\"] # [doc = \" `myc-sec`); explicit `-`/path reads go through `read_source` (shared with `mycfmt`/`myc-check`).\"] fn collect_sources (project : Option < & str > , paths : & [String] ,) -> Result < Vec < (String , String) > , ExitCode > { let mut out = Vec :: new () ; if let Some (dir) = project { for f in walk_myc (Path :: new (dir)) . map_err (| e | { eprintln ! (\"myc-lint: {e}\") ; ExitCode :: from (66) }) ? { let src = std :: fs :: read_to_string (& f) . map_err (| e | { eprintln ! (\"myc-lint: io-error: {}: {e}\" , f . display ()) ; ExitCode :: from (66) }) ? ; let rel = f . strip_prefix (dir) . unwrap_or (& f) . to_string_lossy () . replace ('\\\\' , \"/\") ; out . push ((rel , src)) ; } return Ok (out) ; } if paths . is_empty () { for f in walk_myc (Path :: new (\".\")) . map_err (| e | { eprintln ! (\"myc-lint: {e}\") ; ExitCode :: from (66) }) ? { if let Ok (src) = std :: fs :: read_to_string (& f) { out . push ((f . to_string_lossy () . into_owned () , src)) ; } } return Ok (out) ; } for p in paths { let src = read_source (\"myc-lint: io-error\" , p) . map_err (| _ | ExitCode :: from (66)) ? ; let name = if p == \"-\" { \"<stdin>\" . to_owned () } else { p . clone () } ; out . push ((name , src)) ; } Ok (out) }",
+      "reason": "qualified/associated-function call `Vec :: new` did not resolve to a known-emitted associated fn — Mycelium calls are bare identifiers, and the only sound surface form for `Type::method(...)` is the mangled `Type__method` name the declaration side already emits for a receiver-less inherent-impl associated fn (DN-34 §8.13/8.14), referenced only when that exact declaration is PROVEN present (same-file, or a resolved M-1084 cross-nodule sibling). A primitive/std associated fn with no emitted decl (e.g. `i128::try_from`), an unresolved type, or a `self`-receiving method (excluded by construction — it stays reachable only from its own bare call site) all gap here rather than fabricate a call (G2/VR-5, DN-133)",
+      "item_name": "collect_sources"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 23,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "use mycelium_l1 :: { check_and_resolve , elaborate , parse } ;",
+      "reason": "`use mycelium_l1::check_and_resolve` — `mycelium_l1` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2); `use mycelium_l1::elaborate` — `mycelium_l1` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2); `use mycelium_l1::parse` — `mycelium_l1` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 24,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "use mycelium_lsp :: baseline :: RecoveryProfile ;",
+      "reason": "`use mycelium_lsp.baseline::RecoveryProfile` — `mycelium_lsp.baseline` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 25,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "use mycelium_lsp :: { lint , lint_structured_header , Severity } ;",
+      "reason": "`use mycelium_lsp::lint` — `mycelium_lsp` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2); `use mycelium_lsp::lint_structured_header` — `mycelium_lsp` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2); `use mycelium_lsp::Severity` — `mycelium_lsp` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 27,
+      "col": 1,
+      "category": "DeriveAttr",
+      "rust_construct": "DeriveAttr",
+      "snippet": "# [doc = \" How a fix may be applied — the opt-in boundary (the crux).\"] # [doc = \"\"] # [doc = \" `#[non_exhaustive]`: a future tier may be added without a breaking change — an external exhaustive\"] # [doc = \" `match` must carry a `_` arm (M-644; additive — no variant removed).\"] # [derive (Debug , Clone , Copy , PartialEq , Eq)] # [non_exhaustive] pub enum FixTier { # [doc = \" A reviewable edit; never auto-applied.\"] Suggest , # [doc = \" A behaviour-preserving edit; applied only on `--fix`.\"] Apply , # [doc = \" An incomplete skeleton the author completes; never auto-applied (control-flow stays the author's).\"] Scaffold , }",
+      "reason": "dropped non-doc non-derive attribute(s) on enum `FixTier`: # [non_exhaustive]",
+      "item_name": "FixTier"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 27,
+      "col": 1,
+      "category": "DeriveSatisfied",
+      "rust_construct": "DeriveSatisfied",
+      "snippet": "# [doc = \" How a fix may be applied — the opt-in boundary (the crux).\"] # [doc = \"\"] # [doc = \" `#[non_exhaustive]`: a future tier may be added without a breaking change — an external exhaustive\"] # [doc = \" `match` must carry a `_` arm (M-644; additive — no variant removed).\"] # [derive (Debug , Clone , Copy , PartialEq , Eq)] # [non_exhaustive] pub enum FixTier { # [doc = \" A reviewable edit; never auto-applied.\"] Suggest , # [doc = \" A behaviour-preserving edit; applied only on `--fix`.\"] Apply , # [doc = \" An incomplete skeleton the author completes; never auto-applied (control-flow stays the author's).\"] Scaffold , }",
+      "reason": "enum `FixTier` derive(Clone) is a satisfied no-op under Mycelium's value semantics (ADR-003 — every value already copies structurally; DN-128 §6.1) — not emitted as an impl, not a gap",
+      "item_name": "FixTier"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 27,
+      "col": 1,
+      "category": "DeriveSatisfied",
+      "rust_construct": "DeriveSatisfied",
+      "snippet": "# [doc = \" How a fix may be applied — the opt-in boundary (the crux).\"] # [doc = \"\"] # [doc = \" `#[non_exhaustive]`: a future tier may be added without a breaking change — an external exhaustive\"] # [doc = \" `match` must carry a `_` arm (M-644; additive — no variant removed).\"] # [derive (Debug , Clone , Copy , PartialEq , Eq)] # [non_exhaustive] pub enum FixTier { # [doc = \" A reviewable edit; never auto-applied.\"] Suggest , # [doc = \" A behaviour-preserving edit; applied only on `--fix`.\"] Apply , # [doc = \" An incomplete skeleton the author completes; never auto-applied (control-flow stays the author's).\"] Scaffold , }",
+      "reason": "enum `FixTier` derive(Copy) is a satisfied no-op under Mycelium's value semantics (ADR-003 — every value already copies structurally; DN-128 §6.1) — not emitted as an impl, not a gap",
+      "item_name": "FixTier"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 27,
+      "col": 1,
+      "category": "DeriveSatisfied",
+      "rust_construct": "DeriveSatisfied",
+      "snippet": "# [doc = \" How a fix may be applied — the opt-in boundary (the crux).\"] # [doc = \"\"] # [doc = \" `#[non_exhaustive]`: a future tier may be added without a breaking change — an external exhaustive\"] # [doc = \" `match` must carry a `_` arm (M-644; additive — no variant removed).\"] # [derive (Debug , Clone , Copy , PartialEq , Eq)] # [non_exhaustive] pub enum FixTier { # [doc = \" A reviewable edit; never auto-applied.\"] Suggest , # [doc = \" A behaviour-preserving edit; applied only on `--fix`.\"] Apply , # [doc = \" An incomplete skeleton the author completes; never auto-applied (control-flow stays the author's).\"] Scaffold , }",
+      "reason": "enum `FixTier` derive(Eq): covered by co-occurring PartialEq → `fn eq_FixTier` (product-row collision policy; DN-128 / ONESHOT C2) — not a second emission",
+      "item_name": "FixTier"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 42,
+      "col": 1,
+      "category": "DeriveAttr",
+      "rust_construct": "DeriveAttr",
+      "snippet": "impl FixTier { # [doc = \" The canonical label.\"] # [must_use] pub fn as_str (self) -> & 'static str { match self { FixTier :: Suggest => \"suggest\" , FixTier :: Apply => \"apply\" , FixTier :: Scaffold => \"scaffold\" , } } }",
+      "reason": "dropped non-doc attribute(s) on method `as_str`: # [must_use]",
+      "item_name": "impl FixTier"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 54,
+      "col": 1,
+      "category": "Struct",
+      "rust_construct": "Struct",
+      "snippet": "# [doc = \" A reified fix offer for a finding.\"] # [derive (Debug , Clone , PartialEq , Eq)] pub struct Fix { # [doc = \" The tier (the opt-in boundary).\"] pub tier : FixTier , # [doc = \" What the fix does, in author-facing terms.\"] pub description : String , # [doc = \" For a scaffold: the skeleton the author completes (never applied automatically).\"] pub scaffold : Option < String > , }",
+      "reason": "struct `Fix` uses named fields and references a type not resolvable in-file — emitting it positionally would introduce an unresolved reference that poisons the file's `myc check`; left gapped under the M-1006 resolvability gate (VR-5/G2)",
+      "item_name": "Fix"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 65,
+      "col": 1,
+      "category": "Impl",
+      "rust_construct": "Impl",
+      "snippet": "impl Default for Fix { # [doc = \" The neutral fix offer (M-644 ergonomics): tier [`FixTier::Suggest`] — the **never-auto-applied**\"] # [doc = \" tier, so a defaulted `Fix` can never silently rewrite code (G2). Empty description, no scaffold.\"] fn default () -> Self { Self { tier : FixTier :: Suggest , description : String :: new () , scaffold : None , } } }",
+      "reason": "no member of this impl block could be transpiled (1 sub-issue(s)): impl method `default` body: struct literal `Fix { .. }` — not an in-file single-ctor struct or enum struct-variant that emits (no constructor to build; a cross-nodule variant is an honest DN-113/DN-134-OQ-2 resolvability gap, never a fabricated out-of-file reference — VR-5/G2)",
+      "item_name": "Fix"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 77,
+      "col": 1,
+      "category": "Struct",
+      "rust_construct": "Struct",
+      "snippet": "# [doc = \" One lint finding with its (optional) reified fix.\"] # [derive (Debug , Clone , PartialEq , Eq)] pub struct LintFinding { # [doc = \" The file.\"] pub file : String , # [doc = \" The lint code (`implicit-swap`, `unverified-bound`, …).\"] pub code : String , # [doc = \" Severity (from the M-141 lint).\"] pub severity : Severity , # [doc = \" The breadcrumb / location within the file.\"] pub at : String , # [doc = \" The message.\"] pub message : String , # [doc = \" The fix offer, if any.\"] pub fix : Option < Fix > , }",
+      "reason": "struct `LintFinding` uses named fields and references a type not resolvable in-file — emitting it positionally would introduce an unresolved reference that poisons the file's `myc check`; left gapped under the M-1006 resolvability gate (VR-5/G2)",
+      "item_name": "LintFinding"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 94,
+      "col": 1,
+      "category": "Impl",
+      "rust_construct": "Impl",
+      "snippet": "impl LintFinding { # [doc = \" Attach a reified fix offer, fluently (M-644 ergonomics). Additive builder; sets `fix`.\"] # [must_use] pub fn with_fix (mut self , fix : Fix) -> Self { self . fix = Some (fix) ; self } }",
+      "reason": "no member of this impl block could be transpiled (1 sub-issue(s)): impl method `with_fix` body: function body has a semicolon-terminated (value-discarding) statement expression before the tail — a `let`-chain body maps only simple `let x = e;` bindings plus a single trailing expression",
+      "item_name": "LintFinding"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 103,
+      "col": 1,
+      "category": "Struct",
+      "rust_construct": "Struct",
+      "snippet": "# [doc = \" The aggregated lint result.\"] # [derive (Debug , Clone , Default)] pub struct LintReport { # [doc = \" Every finding, file-ordered.\"] pub findings : Vec < LintFinding > , # [doc = \" Files linted.\"] pub files : usize , }",
+      "reason": "struct `LintReport` uses named fields and references a type not resolvable in-file — emitting it positionally would introduce an unresolved reference that poisons the file's `myc check`; left gapped under the M-1006 resolvability gate (VR-5/G2)",
+      "item_name": "LintReport"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 112,
+      "col": 1,
+      "category": "Impl",
+      "rust_construct": "Impl",
+      "snippet": "impl LintReport { # [doc = \" Push a finding, fluently (M-644 ergonomics). Additive builder; appends to `findings` (does\"] # [doc = \" **not** touch `files` — set that explicitly with [`LintReport::with_files`]).\"] # [must_use] pub fn with_finding (mut self , finding : LintFinding) -> Self { self . findings . push (finding) ; self } # [doc = \" Set the linted-file count, fluently (M-644 ergonomics). Additive builder.\"] # [must_use] pub fn with_files (mut self , files : usize) -> Self { self . files = files ; self } # [doc = \" Whether any finding is an error-severity house-rule violation.\"] # [must_use] pub fn has_errors (& self) -> bool { self . findings . iter () . any (| f | f . severity == Severity :: Error) } # [doc = \" Counts by tier: (apply, suggest, scaffold).\"] # [must_use] pub fn tier_counts (& self) -> (usize , usize , usize) { let mut c = (0 , 0 , 0) ; for f in & self . findings { match f . fix . as_ref () . map (| x | x . tier) { Some (FixTier :: Apply) => c . 0 += 1 , Some (FixTier :: Suggest) => c . 1 += 1 , Some (FixTier :: Scaffold) => c . 2 += 1 , None => { } } } c } }",
+      "reason": "no member of this impl block could be transpiled (4 sub-issue(s)): impl method `with_finding` body: function body has a semicolon-terminated (value-discarding) statement expression before the tail — a `let`-chain body maps only simple `let x = e;` bindings plus a single trailing expression; impl method `with_files` body: function body has a semicolon-terminated (value-discarding) statement expression before the tail — a `let`-chain body maps only simple `let x = e;` bindings plus a single trailing expression; impl method `has_errors` body: method call `.any(...)` has no proven-emitted free-fn referent in this file (neither a D4-mangled inherent `Type__any` nor a bare inherent recorded by this file's left-to-right pass, nor a prim_map / combinator row). Emitting bare `any(recv, …)` would fabricate an unknown prim and file-poison myc-check (G-β Rank A / G2/VR-5; residual when the method body itself gapped — e.g. M-1037 `.to_vec()` inside `read_to_end` — so the declaration was never registered); impl method `tier_counts` body: function body has a semicolon-terminated (value-discarding) statement expression before the tail — a `let`-chain body maps only simple `let x = e;` bindings plus a single trailing expression",
+      "item_name": "LintReport"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 150,
+      "col": 1,
+      "category": "Other",
+      "rust_construct": "Other",
+      "snippet": "# [doc = \" Map a lint code to its reified fix offer (the contract §3 table). Control-flow-changing fixes are\"] # [doc = \" **scaffolds** (never auto-applied); the rest are **suggest** (a value is never fabricated — VR-5). No\"] # [doc = \" lint maps to **apply** in v0 (the first-impl finding above).\"] fn fix_for (code : & str) -> Option < Fix > { match code { \"implicit-swap\" => Some (Fix { tier : FixTier :: Scaffold , description : \"wrap the mixed-paradigm op in an explicit `swap` — you choose the target \\\n                          representation and policy (a conversion is never inserted implicitly; A2/I5)\" . to_owned () , scaffold : Some (\"swap(<value>, to: <TargetRepr>, policy: <policy_ref>)  // fill the target + a real PolicyRef\" . to_owned () ,) , }) , \"placeholder-policy\" => Some (Fix { tier : FixTier :: Suggest , description : \"replace the stub policy digest with a real reified PolicyRef (G2 — a swap's \\\n                          selection must be reified, not faked)\" . to_owned () , scaffold : None , }) , \"unverified-bound\" => Some (Fix { tier : FixTier :: Suggest , description : \"annotate why this `Declared` bound is asserted, or verify it to upgrade the tag \\\n                          (never upgraded silently — VR-5)\" . to_owned () , scaffold : None , }) , \"free-variable\" => Some (Fix { tier : FixTier :: Suggest , description : \"bind the variable with an enclosing `let`, or fix the typo — this is a real \\\n                          open-term error, not a mechanical fix\" . to_owned () , scaffold : None , }) , \"nodule-header\" => Some (Fix { tier : FixTier :: Suggest , description : \"fix the header per the diagnostic; `mycfmt` canonicalizes a well-formed header, \\\n                          but a malformed value is never fabricated (VR-5)\" . to_owned () , scaffold : None , }) , _ => None , } }",
+      "reason": "struct literal `Fix { .. }` — not an in-file single-ctor struct or enum struct-variant that emits (no constructor to build; a cross-nodule variant is an honest DN-113/DN-134-OQ-2 resolvability gap, never a fabricated out-of-file reference — VR-5/G2)",
+      "item_name": "fix_for"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 197,
+      "col": 1,
+      "category": "MacroInvocation",
+      "rust_construct": "MacroInvocation",
+      "snippet": "# [doc = \" Generate an RFC-0014 **recovery scaffold** for an error `class` under a named, bounded [`RecoveryProfile`]\"] # [doc = \" — an explicit handler skeleton the author completes. This is the actionable form of the RFC-0015 §9\"] # [doc = \" \\\"this class is only logged — add a handler?\\\" advisory. It is **always** a scaffold (never applied): the\"] # [doc = \" decision to recover is declared, bounded, and opt-in (A2/I4/I5). The L1 surface syntax for handlers is\"] # [doc = \" RFC-0014's (not yet in the parser), so this is an illustrative, clearly-marked skeleton.\"] # [must_use] pub fn recovery_scaffold (class : & str , profile : RecoveryProfile) -> String { let body = match profile { RecoveryProfile :: Strict => { \"    // strict: propagate (no recovery) — the honest default\" . to_owned () } RecoveryProfile :: Resilient => format ! (\"    // resilient: bounded retry(<={}) on `{class}`; if every attempt fails, propagate (I1/I4)\\n\\\n             \\x20   retry(max = {}) {{ /* todo: the recoverable action */ }}\" , mycelium_lsp :: baseline :: RESILIENT_MAX_ATTEMPTS , mycelium_lsp :: baseline :: RESILIENT_MAX_ATTEMPTS) , } ; format ! (\"// recovery scaffold (opt-in, bounded — RFC-0014 I1/I5; complete or delete):\\n\\\n         handle {class} with {} {{\\n{body}\\n}}\" , profile . as_str ()) }",
+      "reason": "`format!` — format string uses an unsupported specifier (only plain `{}` / `{{` / `}}` are lowered in this MVP — named/width/precision/Debug-only forms are honest gaps, G2) (DN-127/M-1090 WU-3)",
+      "item_name": "recovery_scaffold"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 222,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "# [doc = \" The §4.1 documentation quality-bar lint check set (M-363 §6) — now **active** (Phase 9 Wave B). The\"] # [doc = \" canonical names live in `mycelium-doc` (the crate that runs the checks over the doc-IR); re-exported\"] # [doc = \" here under the historical name so existing callers keep working (DRY — one source of truth).\"] pub use mycelium_doc :: CHECK_NAMES as DOC_QUALITY_CHECKS ;",
+      "reason": "`use mycelium_doc::CHECK_NAMES as DOC_QUALITY_CHECKS` — a renamed cross-nodule import is out of this increment's scope (the alias would need threading through every downstream reference to `DOC_QUALITY_CHECKS` in this file's body); flagged, not guessed (VR-5/G2)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 227,
+      "col": 1,
+      "category": "Other",
+      "rust_construct": "Other",
+      "snippet": "# [doc = \" The status line for the §4.1 doc lint — now **active** (it runs over the M-363 doc-IR via `myc-doc`,\"] # [doc = \" `mycelium_doc::doc_lint`). Has its own gate; does not block the M-366 lint gate.\"] # [must_use] pub fn doc_lint_status () -> String { format ! (\"doc quality-bar lint (§4.1): active — {} checks run over the M-363 doc-IR (myc-doc gate); \\\n         does not block the M-366 gate\" , DOC_QUALITY_CHECKS . len ()) }",
+      "reason": "method call `.len(...)` has no proven-emitted free-fn referent in this file (neither a D4-mangled inherent `Type__len` nor a bare inherent recorded by this file's left-to-right pass, nor a prim_map / combinator row). Emitting bare `len(recv, …)` would fabricate an unknown prim and file-poison myc-check (G-β Rank A / G2/VR-5; residual when the method body itself gapped — e.g. M-1037 `.to_vec()` inside `read_to_end` — so the declaration was never registered)",
+      "item_name": "doc_lint_status"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 238,
+      "col": 1,
+      "category": "Other",
+      "rust_construct": "Other",
+      "snippet": "# [doc = \" Lint one source, appending findings. Header lints always run (text); the M-141 Core-IR lints run over\"] # [doc = \" each **elaborable** definition (parse → check → elaborate → lint); a definition that does not elaborate\"] # [doc = \" is not lintable at the IR level yet and is skipped (honest — not a silent pass, just out of IR scope).\"] pub fn lint_source (file : & str , src : & str , out : & mut Vec < LintFinding >) { for d in lint_structured_header (src) { out . push (to_finding (file , d . code , d . severity , & d . at , & d . message)) ; } let Ok (nodule) = parse (src) else { return ; } ; let Ok ((env , _twin)) = check_and_resolve (& nodule) else { return ; } ; let mut names : Vec < & String > = env . fns . keys () . collect () ; names . sort () ; for name in names { if let Ok (node) = elaborate (& env , name) { for d in lint (& node) { out . push (to_finding (file , d . code , d . severity , & d . at , & d . message)) ; } } } }",
+      "reason": "mutating method body statement is neither a `let`, a supported `self.<field>`/`*<param>` re-assignment, nor (in tail position) the method's own return value — value-threading deliberately refuses any shape outside a flat re-assignment sequence rather than risk an unsound rebind (DN-125 §6.1, never-silent G2/VR-5)",
+      "item_name": "lint_source"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 264,
+      "col": 1,
+      "category": "Other",
+      "rust_construct": "Other",
+      "snippet": "fn to_finding (file : & str , code : & str , severity : Severity , at : & str , message : & str) -> LintFinding { LintFinding { file : file . to_owned () , code : code . to_owned () , severity , at : at . to_owned () , message : message . to_owned () , fix : fix_for (code) , } }",
+      "reason": "struct literal `LintFinding { .. }` — not an in-file single-ctor struct or enum struct-variant that emits (no constructor to build; a cross-nodule variant is an honest DN-113/DN-134-OQ-2 resolvability gap, never a fabricated out-of-file reference — VR-5/G2)",
+      "item_name": "to_finding"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 275,
+      "col": 1,
+      "category": "Other",
+      "rust_construct": "Other",
+      "snippet": "# [doc = \" Lint an explicit set of `(file, contents)` sources, deterministically.\"] # [must_use] pub fn lint_sources (sources : & [(String , String)]) -> LintReport { let mut findings = Vec :: new () ; for (file , src) in sources { lint_source (file , src , & mut findings) ; } findings . sort_by (| a , b | (a . file . as_str () , a . at . as_str ()) . cmp (& (b . file . as_str () , b . at . as_str ()))) ; LintReport { findings , files : sources . len () , } }",
+      "reason": "qualified/associated-function call `Vec :: new` did not resolve to a known-emitted associated fn — Mycelium calls are bare identifiers, and the only sound surface form for `Type::method(...)` is the mangled `Type__method` name the declaration side already emits for a receiver-less inherent-impl associated fn (DN-34 §8.13/8.14), referenced only when that exact declaration is PROVEN present (same-file, or a resolved M-1084 cross-nodule sibling). A primitive/std associated fn with no emitted decl (e.g. `i128::try_from`), an unresolved type, or a `self`-receiving method (excluded by construction — it stays reachable only from its own bare call site) all gap here rather than fabricate a call (G2/VR-5, DN-133)",
+      "item_name": "lint_sources"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "line": 290,
+      "col": 1,
+      "category": "TestItem",
+      "rust_construct": "TestItem",
+      "snippet": "# [cfg (test)] mod tests { use super :: * ; # [test] fn the_fix_table_maps_each_lint_to_the_right_tier () { for code in [\"placeholder-policy\" , \"unverified-bound\" , \"free-variable\" , \"nodule-header\" ,] { assert_eq ! (fix_for (code) . unwrap () . tier , FixTier :: Suggest , \"{code}\") ; } assert_eq ! (fix_for (\"implicit-swap\") . unwrap () . tier , FixTier :: Scaffold) ; assert ! (fix_for (\"not-a-lint\") . is_none ()) ; } # [test] fn an_implicit_swap_offers_a_scaffold_never_an_apply () { let fix = fix_for (\"implicit-swap\") . unwrap () ; assert_eq ! (fix . tier , FixTier :: Scaffold) ; assert ! (fix . scaffold . is_some ()) ; } # [test] fn no_lint_maps_to_an_auto_apply_fix_in_v0 () { for code in [\"implicit-swap\" , \"placeholder-policy\" , \"unverified-bound\" , \"free-variable\" , \"nodule-header\" ,] { if let Some (fix) = fix_for (code) { assert_ne ! (fix . tier , FixTier :: Apply , \"{code} must not be auto-apply in v0\") ; } } } # [test] fn a_malformed_header_is_surfaced_with_a_suggest_fix () { let r = lint_sources (& [(\"h.myc\" . to_owned () , \"// nodule: 9bad\\nnodule d\\n\" . to_owned ())]) ; let f = r . findings . iter () . find (| f | f . code == \"nodule-header\") . expect (\"header lint fires\") ; assert_eq ! (f . fix . as_ref () . unwrap () . tier , FixTier :: Suggest) ; } # [test] fn the_recovery_scaffold_is_bounded_and_marked () { let s = recovery_scaffold (\"SwapOutOfRange\" , RecoveryProfile :: Resilient) ; assert ! (s . contains (\"retry(max = 3)\") , \"{s}\") ; assert ! (s . contains (\"opt-in, bounded\") , \"{s}\") ; assert ! (recovery_scaffold (\"SwapOutOfRange\" , RecoveryProfile :: Strict) . contains (\"propagate\")) ; } # [test] fn the_doc_lint_is_now_active () { assert_eq ! (DOC_QUALITY_CHECKS . len () , 8) ; assert ! (doc_lint_status () . contains (\"active\")) ; assert_eq ! (DOC_QUALITY_CHECKS , mycelium_doc :: CHECK_NAMES) ; } # [test] fn fix_default_is_the_never_auto_applied_tier_and_builders_compose () { assert_eq ! (Fix :: default () . tier , FixTier :: Suggest) ; let finding = LintFinding { file : \"a.myc\" . into () , code : \"implicit-swap\" . into () , severity : Severity :: Warning , at : \"f\" . into () , message : \"m\" . into () , fix : None , } . with_fix (Fix :: default ()) ; assert_eq ! (finding . fix . as_ref () . map (| x | x . tier) , Some (FixTier :: Suggest)) ; let report = LintReport :: default () . with_finding (finding) . with_files (1) ; assert_eq ! (report . findings . len () , 1) ; assert_eq ! (report . files , 1) ; } }",
+      "reason": "#[cfg(test)] item — out of scope for this PoC's transpilation surface (excluded from the expressible-fraction denominator, but recorded, never silently skipped)",
+      "item_name": "tests"
+    }
+  ],
+  "category_counts": {
+    "DeriveAttr": 2,
+    "DeriveSatisfied": 3,
+    "Impl": 3,
+    "Import": 9,
+    "MacroInvocation": 1,
+    "MultiStmtBody": 2,
+    "Other": 7,
+    "ReservedWord": 1,
+    "Struct": 3,
+    "TestItem": 1
+  }
+}

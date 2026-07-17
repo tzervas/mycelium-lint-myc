@@ -1,0 +1,96 @@
+{
+  "files": [
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "total_items": 9,
+      "non_test_items": 9,
+      "emitted": 0,
+      "gaps": 10,
+      "expressible_pct": 0.0,
+      "category_counts": {
+        "Import": 5,
+        "MultiStmtBody": 2,
+        "Other": 2,
+        "ReservedWord": 1
+      }
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+      "total_items": 19,
+      "non_test_items": 18,
+      "emitted": 2,
+      "gaps": 22,
+      "expressible_pct": 11.11111111111111,
+      "category_counts": {
+        "DeriveAttr": 2,
+        "DeriveSatisfied": 3,
+        "Impl": 3,
+        "Import": 4,
+        "MacroInvocation": 1,
+        "Other": 5,
+        "Struct": 3,
+        "TestItem": 1
+      }
+    }
+  ],
+  "totals": {
+    "total_items": 28,
+    "non_test_items": 27,
+    "emitted": 2,
+    "gaps": 32,
+    "expressible_pct": 7.4074074074074066,
+    "category_counts": {
+      "DeriveAttr": 2,
+      "DeriveSatisfied": 3,
+      "Impl": 3,
+      "Import": 9,
+      "MacroInvocation": 1,
+      "MultiStmtBody": 2,
+      "Other": 7,
+      "ReservedWord": 1,
+      "Struct": 3,
+      "TestItem": 1
+    }
+  },
+  "remap": {
+    "phylum": {
+      "source_crate": "mycelium-lint",
+      "target_phylum": "lint"
+    },
+    "nodules": [
+      {
+        "target_nodule": "lint.bin.myc-lint",
+        "operation": "Keep",
+        "sources": [
+          {
+            "rust_path": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+            "rust_span": null,
+            "moved_items": []
+          }
+        ],
+        "rationale": "structure-preserving 1:1 (DN-109 §5.3-B v0 default: every emitted nodule keeps its source file's mod-tree position, no restructuring proposed)",
+        "safety": "Safe",
+        "api_surface_changed": false,
+        "identity_neutral": true,
+        "guarantee": "Declared"
+      },
+      {
+        "target_nodule": "lint",
+        "operation": "Keep",
+        "sources": [
+          {
+            "rust_path": "/root/git/isolated/mycelium/crates/mycelium-lint/src/lib.rs",
+            "rust_span": null,
+            "moved_items": []
+          }
+        ],
+        "rationale": "structure-preserving 1:1 (DN-109 §5.3-B v0 default: every emitted nodule keeps its source file's mod-tree position, no restructuring proposed)",
+        "safety": "Safe",
+        "api_surface_changed": false,
+        "identity_neutral": true,
+        "guarantee": "Declared"
+      }
+    ],
+    "idiom_choices": []
+  }
+}

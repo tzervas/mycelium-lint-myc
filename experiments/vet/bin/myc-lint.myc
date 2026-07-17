@@ -1,0 +1,20 @@
+// nodule: lint.bin_kw.myc_u2D_lint
+// `myc-lint` — lint + auto-fix CLI (M-366; contract `docs/spec/Lint-and-Autofix-Contract.md`).
+//
+// Surfaces the M-141 lints + header lints as **actionable, reified, opt-in** fixes (suggest / apply /
+// scaffold). **No silent rewrite** (G2): `--fix` applies only behaviour-preserving `apply` edits — and in
+// v0 there are none (every lint fix is suggest or scaffold; header canonicalization is `mycfmt`'s job), so
+// `--fix` rewrites nothing. A control-flow change (an explicit `swap`, a recovery handler) is always a
+// **scaffold**, never auto-applied (RFC-0014 I1/I5).
+//
+// ```text
+// myc-lint [--project <dir>] [--fix] [--explain] [<file.myc | ->...]
+// ```
+//
+// Exit codes: 0 clean (or warnings only) · 1 an error-severity finding · 64 usage · 66 I/O.
+// @summary: best-effort transpilation via mycelium-transpile (M-873). Declared,
+// unvalidated — no Mycelium parser/typechecker confirms this output; see the
+// accompanying .gap.json for every construct this pass could not express.
+nodule lint.bin_kw.myc_u2D_lint;
+
+

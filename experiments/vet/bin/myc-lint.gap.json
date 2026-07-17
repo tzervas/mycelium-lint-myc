@@ -1,0 +1,107 @@
+{
+  "source": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+  "emitted_items": [],
+  "gaps": [
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 1,
+      "col": 1,
+      "category": "ReservedWord",
+      "rust_construct": "ReservedWord",
+      "snippet": "nodule lint.bin.myc-lint;",
+      "reason": "derived nodule path `lint.bin.myc-lint` has segment(s) [bin] colliding with a Mycelium reserved word — emitting them verbatim would fail to parse (`nodule lint.bin.myc-lint;` tokenizes the colliding word as a keyword, not an identifier); each colliding segment is escaped with the `_kw` suffix (now `lint.bin_kw.myc_u2D_lint`) rather than dropped, so distinct source files whose only differing segment is a reserved word (e.g. `l1.fuse` vs `l1.nodule`) stay distinguishable instead of both collapsing onto the same nodule path (G2/VR-5)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 15,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "use std :: path :: Path ;",
+      "reason": "`use std.path::Path` — `std.path` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 16,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "use std :: process :: ExitCode ;",
+      "reason": "`use std.process::ExitCode` — `std.process` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 18,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "use mycelium_cli_common :: { read_source , walk_myc , Args } ;",
+      "reason": "`use mycelium_cli_common::read_source` — `mycelium_cli_common` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2); `use mycelium_cli_common::walk_myc` — `mycelium_cli_common` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2); `use mycelium_cli_common::Args` — `mycelium_cli_common` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 19,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "use mycelium_lint :: { doc_lint_status , lint_sources , LintReport } ;",
+      "reason": "`use mycelium_lint::doc_lint_status` — `doc_lint_status` is not among sibling `mycelium_lint`'s successfully-emitted surface in this batch (the sibling file itself gapped it rather than emitting it). Flagged, not guessed (VR-5/G2); `use mycelium_lint::lint_sources` — `lint_sources` is not among sibling `mycelium_lint`'s successfully-emitted surface in this batch (the sibling file itself gapped it rather than emitting it). Flagged, not guessed (VR-5/G2); `use mycelium_lint::LintReport` — `LintReport` is not among sibling `mycelium_lint`'s successfully-emitted surface in this batch (the sibling file itself gapped it rather than emitting it). Flagged, not guessed (VR-5/G2)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 20,
+      "col": 1,
+      "category": "Import",
+      "rust_construct": "Import",
+      "snippet": "use mycelium_lsp :: Severity ;",
+      "reason": "`use mycelium_lsp::Severity` — `mycelium_lsp` is not a sibling module OR sibling phylum transpiled in this same batch (an external crate, `std`, or simply out of this batch's target set). Flagged, not guessed (VR-5/G2)",
+      "item_name": null
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 22,
+      "col": 1,
+      "category": "MultiStmtBody",
+      "rust_construct": "MultiStmtBody",
+      "snippet": "fn usage () -> ExitCode { eprintln ! (\"usage: myc-lint [--project <dir>] [--fix] [--explain] [<file.myc | ->...]\") ; ExitCode :: from (64) }",
+      "reason": "function body contains a macro-invocation statement (e.g. `debug_assert!`/`println!`) — no macro system in this grammar fragment",
+      "item_name": "usage"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 27,
+      "col": 1,
+      "category": "MultiStmtBody",
+      "rust_construct": "MultiStmtBody",
+      "snippet": "fn main () -> ExitCode { let mut project : Option < String > = None ; let mut fix = false ; let mut explain = false ; let mut paths : Vec < String > = Vec :: new () ; let mut args = Args :: from_env () ; while let Some (a) = args . next () { match a . as_str () { \"--project\" => match args . value () { Some (p) => project = Some (p) , None => return usage () , } , \"--fix\" => fix = true , \"--explain\" => explain = true , \"-\" => paths . push (\"-\" . to_owned ()) , s if s . starts_with (\"--\") => return usage () , s => paths . push (s . to_owned ()) , } } let sources = match collect_sources (project . as_deref () , & paths) { Ok (s) => s , Err (code) => return code , } ; if sources . is_empty () { eprintln ! (\"myc-lint: no .myc sources to lint\") ; return usage () ; } let report = lint_sources (& sources) ; print_report (& report , explain , fix) ; if report . has_errors () { ExitCode :: from (1) } else { ExitCode :: SUCCESS } }",
+      "reason": "`let` binding uses an unsupported pattern (only simple `let x = e;` is supported)",
+      "item_name": "main"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 67,
+      "col": 1,
+      "category": "Other",
+      "rust_construct": "Other",
+      "snippet": "fn print_report (report : & LintReport , explain : bool , fix : bool) { for f in & report . findings { let sev = match f . severity { Severity :: Error => \"error\" , Severity :: Warning => \"warning\" , } ; let tier = f . fix . as_ref () . map_or (\"\" , | x | x . tier . as_str ()) ; let tier_note = if tier . is_empty () { String :: new () } else { format ! (\" (fix: {tier})\") } ; println ! (\"{}: {sev} {} at {}{tier_note}: {}\" , f . file , f . code , f . at , f . message) ; if explain { if let Some (fx) = & f . fix { println ! (\"    → {}\" , fx . description) ; if let Some (scaffold) = & fx . scaffold { for line in scaffold . lines () { println ! (\"      {line}\") ; } } } } } let (apply , suggest , scaffold) = report . tier_counts () ; eprintln ! (\"myc-lint: {} finding(s) across {} file(s) — {apply} apply / {suggest} suggest / {scaffold} scaffold\" , report . findings . len () , report . files) ; if fix { eprintln ! (\"myc-lint: --fix applied 0 edit(s) — v0 has no safe auto-fix (suggest/scaffold only; \\\n             header canonicalization is `mycfmt`'s job). Nothing was rewritten (G2).\") ; } if explain { eprintln ! (\"myc-lint: {}\" , doc_lint_status ()) ; } }",
+      "reason": "function has no return type (implicit `()`) — no unit value is representable in this grammar fragment",
+      "item_name": "print_report"
+    },
+    {
+      "file": "/root/git/isolated/mycelium/crates/mycelium-lint/src/bin/myc-lint.rs",
+      "line": 113,
+      "col": 1,
+      "category": "Other",
+      "rust_construct": "Other",
+      "snippet": "# [doc = \" Resolve the sources: `--project <dir>` walks for `.myc`; explicit paths are read (`-` = stdin);\"] # [doc = \" neither → the current directory. The `.myc` walk is `mycelium_cli_common::walk_myc` (shared with\"] # [doc = \" `myc-sec`); explicit `-`/path reads go through `read_source` (shared with `mycfmt`/`myc-check`).\"] fn collect_sources (project : Option < & str > , paths : & [String] ,) -> Result < Vec < (String , String) > , ExitCode > { let mut out = Vec :: new () ; if let Some (dir) = project { for f in walk_myc (Path :: new (dir)) . map_err (| e | { eprintln ! (\"myc-lint: {e}\") ; ExitCode :: from (66) }) ? { let src = std :: fs :: read_to_string (& f) . map_err (| e | { eprintln ! (\"myc-lint: io-error: {}: {e}\" , f . display ()) ; ExitCode :: from (66) }) ? ; let rel = f . strip_prefix (dir) . unwrap_or (& f) . to_string_lossy () . replace ('\\\\' , \"/\") ; out . push ((rel , src)) ; } return Ok (out) ; } if paths . is_empty () { for f in walk_myc (Path :: new (\".\")) . map_err (| e | { eprintln ! (\"myc-lint: {e}\") ; ExitCode :: from (66) }) ? { if let Ok (src) = std :: fs :: read_to_string (& f) { out . push ((f . to_string_lossy () . into_owned () , src)) ; } } return Ok (out) ; } for p in paths { let src = read_source (\"myc-lint: io-error\" , p) . map_err (| _ | ExitCode :: from (66)) ? ; let name = if p == \"-\" { \"<stdin>\" . to_owned () } else { p . clone () } ; out . push ((name , src)) ; } Ok (out) }",
+      "reason": "qualified/associated-function call `Vec :: new` did not resolve to a known-emitted associated fn — Mycelium calls are bare identifiers, and the only sound surface form for `Type::method(...)` is the mangled `Type__method` name the declaration side already emits for a receiver-less inherent-impl associated fn (DN-34 §8.13/8.14), referenced only when that exact declaration is PROVEN present (same-file, or a resolved M-1084 cross-nodule sibling). A primitive/std associated fn with no emitted decl (e.g. `i128::try_from`), an unresolved type, or a `self`-receiving method (excluded by construction — it stays reachable only from its own bare call site) all gap here rather than fabricate a call (G2/VR-5, DN-133)",
+      "item_name": "collect_sources"
+    }
+  ],
+  "total_top_level_items": 9
+}
